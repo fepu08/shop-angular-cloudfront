@@ -9,17 +9,17 @@ phases:
   install:
     runtime-versions:
       nodejs: 14
-
     commands:
       - echo Updating and Installing system dependencies...
       - apt-get update -y -q
 
+      - echo Installing necessary dependencies for Google Chrome...
+      - apt-get install -y fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libatspi2.0-0 libcups2 libgbm1 libgtk-3-0 libgtk-4-1 libu2f-udev libvulkan1 libxcomposite1 libxdamage1 libxkbcommon0 libxrandr2 xdg-utils
+
       - echo Installing Google Chrome for testing
       - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-      - dpkg -i google-chrome-stable_current_amd64.deb
-      - apt -f install
+      - dpkg -i google-chrome-stable_current_amd64.deb || apt-get -fy install
 
-      # Install all necessary dependencies:
       - echo Installing NPM dependencies...
       - npm install
 
@@ -27,19 +27,19 @@ phases:
     commands:
       # Perform Code quality checks:
       - echo Checking code style...
-#      - npm run lint
+      # - npm run lint
 
       - echo Running unit tests...
-#      - npm run test:ci
+      # - npm run test:ci
 
       - echo Running unit tests over serverless app...
-#      - npm run sam:test
+      # - npm run sam:test
 
       - echo Building a project...
-      - npm run build --configuration=${BUILD_CONFIGURATION}
+      - npm run build -- --configuration=${BUILD_CONFIGURATION}
 
       - echo Running npm audit
-#      - npm audit
+      # - npm audit
 
   post_build:
     commands:
